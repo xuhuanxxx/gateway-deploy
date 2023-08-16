@@ -1,0 +1,796 @@
+# HTTP(S) and SOCKS4(A)/SOCKS5 server on the same port
+mixed-port: 7890
+
+# Port of HTTP(S) proxy server on the local end
+port: 7891
+
+# Port of SOCKS5 proxy server on the local end
+socks-port: 7892
+
+# Transparent proxy server port for Linux and macOS (Redirect TCP and TProxy UDP)
+# redir-port: 7893
+
+# Transparent proxy server port for Linux (TProxy TCP and TProxy UDP)
+# tproxy-port: 7893
+
+# authentication of local SOCKS5/HTTP(S) server
+# authentication:
+#  - "user1:pass1"
+#  - "user2:pass2"
+
+allow-lan: true
+
+# This is only applicable when `allow-lan` is `true`
+# '*': bind all IP addresses
+# 192.168.122.11: bind a single IPv4 address
+# "[aaaa::a8aa:ff:fe09:57d8]": bind a single IPv6 address
+bind-address: '*'
+
+mode: rule
+
+# info / warning / error / debug / silent
+log-level: info
+
+ipv6: false
+
+# external-controller: 0.0.0.0:9090
+
+# A relative path to the configuration directory or an absolute path to a
+# directory in which you put some static web resource. Clash core will then
+# serve it at `${API}/ui`.
+# external-ui: 'ui'
+
+# ALWAYS set a secret if RESTful API is listening on 0.0.0.0
+secret: ${SECRET}
+
+# Outbound interface name
+interface-name: ${NIC_NAME}
+
+hosts:
+  'mtalk.google.com': 108.177.125.188
+
+profile:
+  # Store the `select` results in $HOME/.config/clash/.cache
+  # set false If you don't want this behavior
+  # when two different configurations have groups with the same name, the selected values are shared
+  store-selected: true
+  store-fakeip: true
+
+# DNS server settings
+# This section is optional. When not present, the DNS server will be disabled.
+dns:
+  enable: true
+  ipv6: false
+  enhanced-mode: fake-ip #redir-host
+  listen: ${DNS_PORT}
+  default-nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+  # use-hosts: true # lookup hosts and return IP record
+
+  fake-ip-range: 198.18.0.1/16 # Fake IP addresses pool CIDR
+  # real IP addresses
+  fake-ip-filter:
+    - '*.lan'
+    - '*.local'
+    - '*.localhost'
+    - '*.localdomain'
+    - '*.example'
+    - '*.home.arpa'
+    - time.*.com
+    - time.*.gov
+    - time.*.edu.cn
+    - time.*.apple.com
+    - time1.*.com
+    - time2.*.com
+    - time3.*.com
+    - time4.*.com
+    - time5.*.com
+    - time6.*.com
+    - time7.*.com
+    - ntp.*.com
+    - ntp1.*.com
+    - ntp2.*.com
+    - ntp3.*.com
+    - ntp4.*.com
+    - ntp5.*.com
+    - ntp6.*.com
+    - ntp7.*.com
+    - '*.time.edu.cn'
+    - '*.ntp.org.cn'
+    - '+.pool.ntp.org'
+    - time1.cloud.tencent.com
+    - music.163.com
+    - '*.music.163.com'
+    - '*.126.net'
+    - musicapi.taihe.com
+    - music.taihe.com
+    - songsearch.kugou.com
+    - trackercdn.kugou.com
+    - '*.kuwo.cn'
+    - api-jooxtt.sanook.com
+    - api.joox.com
+    - joox.com
+    - y.qq.com
+    - '*.y.qq.com'
+    - streamoc.music.tc.qq.com
+    - mobileoc.music.tc.qq.com
+    - isure.stream.qqmusic.qq.com
+    - dl.stream.qqmusic.qq.com
+    - aqqmusic.tc.qq.com
+    - amobile.music.tc.qq.com
+    - '*.music.migu.cn'
+    - music.migu.cn
+    - '+.msftconnecttest.com'
+    - '+.msftncsi.com'
+    - msftconnecttest.com
+    - msftncsi.com
+    - localhost.ptlogin2.qq.com
+    - localhost.sec.qq.com
+    - '+.srv.nintendo.net'
+    - '*.n.n.srv.nintendo.net'
+    - '+.stun.playstation.net'
+    - xbox.*.*.microsoft.com
+    - '*.*.xboxlive.com'
+    - xbox.*.microsoft.com
+    - xnotify.xboxlive.com
+    - '+.battlenet.com.cn'
+    - '+.wotgame.cn'
+    - '+.wggames.cn'
+    - '+.wowsgame.cn'
+    - '+.wargaming.net'
+    - proxy.golang.org
+    - 'stun.*.*'
+    - 'stun.*.*.*'
+    - '+.stun.*.*'
+    - '+.stun.*.*.*'
+    - '+.stun.*.*.*.*'
+    - '+.stun.*.*.*.*.*'
+    - heartbeat.belkin.com
+    - '*.linksys.com'
+    - '*.linksyssmartwifi.com'
+    - '*.router.asus.com'
+    - mesu.apple.com
+    - swscan.apple.com
+    - swquery.apple.com
+    - swdownload.apple.com
+    - swcdn.apple.com
+    - swdist.apple.com
+    - lens.l.google.com
+    - stun.l.google.com
+    - '+.nflxvideo.net'
+    - '*.square-enix.com'
+    - '*.finalfantasyxiv.com'
+    - '*.ffxiv.com'
+    - '*.ff14.sdo.com'
+    - ff.dorado.sdo.com
+    - '*.mcdn.bilivideo.cn'
+    - '+.media.dssott.com'
+    - +.cmbchina.com
+    - +.cmbimg.com
+
+  nameserver:
+    - dhcp://${NIC_NAME}
+    - 223.5.5.5
+    - 119.29.29.29
+
+  nameserver-policy:
+    '+.taobao.com': '223.5.5.5'
+    '+.qq.com': '119.29.29.29'
+    'mtalk.google.com': '108.177.125.188'
+    'dl.google.com': '119.29.29.29'
+    'dl.l.google.com': '119.29.29.29'
+    'update.googleapis.com': '119.29.29.29'
+
+  # When `fallback` is present, the DNS server will send concurrent requests
+  # to the servers in this section along with servers in `nameservers`.
+  # The answers from fallback servers are used when the GEOIP country
+  # is not `CN`.
+  # fallback:
+    # - https://8.8.4.4/dns-query
+    # - https://1.0.0.1/dns-query
+    # - https://public.dns.iij.jp/dns-query
+    # - https://azure.cloudflare-dns.com/dns-query
+    # - https://dns.dnshome.de/dns-query
+    # - https://dns.hostux.net/dns-query
+    # - https://NoTMIKE.dev/dns.php
+    # - https://doh.42l.fr/dns-query
+    # - https://DNS.HeN.ee/dns-query
+    # - https://doh.dnswarden.com/uncensored
+    # - tls://one.one.one.one:853
+    # - tls://dns.google:853
+    # - https://dns.google/dns-query
+    # - https://cloudflare-dns.com/dns-query
+    # - https://dns.quad9.net/dns-query
+    # - https://mozilla.cloudflare-dns.com/dns-query
+    # - https://EU2.DNS.LAVATE.CH/dns-query
+    # - https://DANDELIONSPROUT.Asuscomm.com:2501/dns-query
+    # - https://dns.switch.ch/dns-query
+    # - https://dnsforge.de/dns-query
+    # - https://dns.adguard.com/dns-query
+    # - https://doh-de.blahdns.com/dns-query
+    # - tls://1.1.1.1:853
+    # - tls://1.0.0.1:853
+    # - 101.6.6.6:5353
+
+  # If IP addresses resolved with servers in `nameservers` are in the specified
+  # subnets below, they are considered invalid and results from `fallback`
+  # servers are used instead.
+  #
+  # IP address resolved with servers in `nameserver` is used when
+  # `fallback-filter.geoip` is true and when GEOIP of the IP address is `CN`.
+  #
+  # If `fallback-filter.geoip` is false, results from `nameserver` nameservers
+  # are always used if not match `fallback-filter.ipcidr`.
+  #
+  # This is a countermeasure against DNS pollution attacks.
+  # fallback-filter:
+  #   geoip: true
+  #   geoip-code: CN
+  #   ipcidr:
+  #     - 0.0.0.0/8
+  #     - 10.0.0.0/8
+  #     - 100.64.0.0/10
+  #     - 127.0.0.0/8
+  #     - 169.254.0.0/16
+  #     - 172.16.0.0/12
+  #     - 192.0.0.0/24
+  #     - 192.0.2.0/24
+  #     - 192.88.99.0/24
+  #     - 192.168.0.0/16
+  #     - 198.18.0.0/15
+  #     - 198.51.100.0/24
+  #     - 203.0.113.0/24
+  #     - 224.0.0.0/4
+  #     - 240.0.0.0/4
+  #     - 255.255.255.255/32
+  #   domain:
+  #     - "+.google.com"
+  #     - "+.facebook.com"
+  #     - "+.youtube.com"
+  #     - "+.githubusercontent.com"
+  #     - "+.googlevideo.com"
+  #     - "+.msftconnecttest.com"
+  #     - "+.msftncsi.com"
+
+tun:
+  enable: true
+  stack: system # or gvisor
+  dns-hijack:
+    - 8.8.8.8:53
+    - tcp://8.8.8.8:53
+    - any:53
+    - tcp://any:53
+
+  # auto-route: true # manage `ip route` and `ip rules`
+  # auto-redir: true # manage nftable REDIRECT
+  # auto-detect-interface: true # conflict with `interface-name`
+
+# 服务器节点订阅
+proxy-providers:
+  Subscribe:
+    type: http
+    url: ${SUB_URL} # 放机场订阅链接
+    interval: 42300
+    path: ./Proxy/Subscribe.yaml
+    health-check:
+      enable: true
+      interval: 600
+      url: http://www.gstatic.com/generate_204
+
+proxy-groups:
+  - name: 🚀  Proxy
+    type: select
+    proxies:
+      - 🕹️  Auto
+      - 🇭🇰  HK
+      - 🇸🇬  SG
+      - 🏝️  TW
+      - 🇯🇵  JP
+      - 🇰🇷  KR
+      - 🇺🇸  US
+    use:
+      - Subscribe
+
+  - name: 🛰️  iCloudRelay
+    type: select
+    proxies:
+      - 🚀  Proxy
+      - 🎯  Direct
+      - 🇭🇰  HK
+      - 🇸🇬  SG
+      - 🏝️  TW
+      - 🇯🇵  JP
+      - 🇰🇷  KR
+      - 🇺🇸  US
+
+  - name: ☁️  iCloud
+    type: select
+    proxies:
+      - 🎯  Direct
+      - 🚀  Proxy
+      - 🇭🇰  HK
+      - 🇸🇬  SG
+      - 🏝️  TW
+      - 🇯🇵  JP
+      - 🇰🇷  KR
+      - 🇺🇸  US
+
+  - name: 🍎  Apple
+    type: select
+    proxies:
+      - 🎯  Direct
+      - 🚀  Proxy
+      - 🇭🇰  HK
+      - 🇸🇬  SG
+      - 🏝️  TW
+      - 🇯🇵  JP
+      - 🇰🇷  KR
+      - 🇺🇸  US
+
+  - name: 📹  Youtube
+    type: select
+    proxies:
+      - 🚀  Proxy
+      - 🇭🇰  HK
+      - 🇸🇬  SG
+      - 🏝️  TW
+      - 🇯🇵  JP
+      - 🇰🇷  KR
+      - 🇺🇸  US
+
+  - name: 🪁  Google
+    type: select
+    proxies:
+      - 🚀  Proxy
+      - 🇭🇰  HK
+      - 🇸🇬  SG
+      - 🏝️  TW
+      - 🇯🇵  JP
+      - 🇰🇷  KR
+      - 🇺🇸  US
+
+  - name: 🐙  Github
+    type: select
+    proxies:
+      - 🚀  Proxy
+      - 🎯  Direct
+      - 🇭🇰  HK
+      - 🇸🇬  SG
+      - 🏝️  TW
+      - 🇯🇵  JP
+      - 🇰🇷  KR
+      - 🇺🇸  US
+
+  - name: 🪟  Microsoft
+    type: select
+    proxies:
+      - 🎯  Direct
+      - 🚀  Proxy
+      - 🇭🇰  HK
+      - 🇸🇬  SG
+      - 🏝️  TW
+      - 🇯🇵  JP
+      - 🇰🇷  KR
+      - 🇺🇸  US
+
+  - name: 🎬  Netflix
+    type: select
+    proxies:
+      - 🚀  Proxy
+      - 🇭🇰  HK
+      - 🇸🇬  SG
+      - 🏝️  TW
+      - 🇯🇵  JP
+      - 🇰🇷  KR
+      - 🇺🇸  US
+
+  - name: 🎮  Steam
+    type: select
+    proxies:
+      - 🚀  Proxy
+      - 🎯  Direct
+      - 🇭🇰  HK
+      - 🇸🇬  SG
+      - 🏝️  TW
+      - 🇯🇵  JP
+      - 🇰🇷  KR
+      - 🇺🇸  US
+
+  - name: 📲  Telegram
+    type: select
+    proxies:
+      - 🚀  Proxy
+      - 🇭🇰  HK
+      - 🇸🇬  SG
+      - 🏝️  TW
+      - 🇯🇵  JP
+      - 🇰🇷  KR
+      - 🇺🇸  US
+
+  - name: 🤖️  OpenAI
+    type: select
+    proxies:
+      - 🚀  Proxy
+      - 🇭🇰  HK
+      - 🇸🇬  SG
+      - 🏝️  TW
+      - 🇯🇵  JP
+      - 🇰🇷  KR
+      - 🇺🇸  US
+
+  - name: 🎲  Speedtest
+    type: select
+    proxies:
+      - 🚀  Proxy
+      - 🇭🇰  HK
+      - 🇸🇬  SG
+      - 🏝️  TW
+      - 🇯🇵  JP
+      - 🇰🇷  KR
+      - 🇺🇸  US
+
+  - name: 🛡  Guard
+    type: select
+    proxies:
+      - REJECT
+      - 🎯  Direct
+
+  - name: 🕹️  Auto
+    type: url-test
+    use:
+      - Subscribe
+    filter: ^((?!网址|网站|🇺🇸|美|US|States|American|英|英国|🇬🇧|伦敦).)*$
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 500
+
+  - name: 🇭🇰  HK
+    type: url-test
+    use:
+      - Subscribe
+    filter: '港|🇭🇰|HK|(?i)Hong'
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 500
+
+  - name: 🇸🇬  SG
+    type: url-test
+    use:
+      - Subscribe
+    filter: '新加坡|坡|狮城|🇸🇬|SG|(?i)Singapore'
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 500
+
+  - name: 🏝️  TW
+    type: url-test
+    use:
+      - Subscribe
+    filter: '台|🇹🇼|湾|TW|(?i)Taiwan'
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 500
+
+  - name: 🇯🇵  JP
+    type: url-test
+    use:
+      - Subscribe
+    filter: '日|🇯🇵|东京|JP|(?i)Japan'
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 500
+
+  - name: 🇰🇷  KR
+    type: url-test
+    use:
+      - Subscribe
+    filter: '韩|🇰🇷|KR|Korea'
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 500
+
+  - name: 🇺🇸  US
+    type: url-test
+    use:
+      - Subscribe
+    filter: '美|🇺🇲|US|(?i)States|American'
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 500
+
+  - name: 🎯  Direct
+    type: select
+    proxies:
+      - DIRECT
+      - 🚀  Proxy
+      - 🇭🇰  HK
+      - 🇸🇬  SG
+      - 🏝️  TW
+      - 🇯🇵  JP
+      - 🇰🇷  KR
+      - 🇺🇸  US
+
+  - name: ⌛  Final
+    type: select
+    proxies:
+      - 🚀  Proxy
+      - 🎯  Direct
+      - 🇭🇰  HK
+      - 🇸🇬  SG
+      - 🏝️  TW
+      - 🇯🇵  JP
+      - 🇰🇷  KR
+      - 🇺🇸  US
+
+rule-providers:
+  Unbreak:
+    type: http
+    behavior: classical
+    path: ./RuleSet/Unbreak.yaml
+    url: https://ghproxy.com/https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Providers/UnBan.yaml
+    interval: 86400
+
+  Advertising:
+    type: http
+    behavior: domain
+    format: "text"
+    path: ./RuleSet/Advertising.txt
+    url: https://cdn.jsdelivr.net/gh/Loyalsoldier/surge-rules@release/reject.txt
+    # url: https://cdn.jsdelivr.net/gh/xuhuanxxx/network-rules@release/category-ads.yaml
+    interval: 86400
+
+  # Privacy:
+  #   type: http
+  #   behavior: classical
+  #   path: ./RuleSet/Privacy.yaml
+  #   url: https://ghproxy.com/https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Providers/BanEasyPrivacy.yaml
+  #   interval: 86400
+
+  # Hijacking:
+  #   type: http
+  #   behavior: classical
+  #   path: ./RuleSet/Hijacking.yaml
+  #   url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Hijacking/Hijacking.yaml
+  #   interval: 86400
+
+  AppleCN:
+    type: http
+    behavior: domain
+    format: text
+    path: ./RuleSet/AppleCN.txt
+    url: https://cdn.jsdelivr.net/gh/xuhuanxxx/network-rules@release/apple@cn.txt
+    interval: 86400
+
+  iCloudRelay:
+    type: http
+    behavior: domain
+    format: text
+    path: ./RuleSet/iCloudRelay.txt
+    url: https://cdn.jsdelivr.net/gh/xuhuanxxx/network-rules@release/icloudprivaterelay.txt
+    interval: 86400
+
+  iCloud:
+    type: http
+    behavior: domain
+    format: text
+    path: ./RuleSet/iCloud.txt
+    url: https://cdn.jsdelivr.net/gh/xuhuanxxx/network-rules@release/icloud.txt
+    interval: 86400
+
+  Apple:
+    type: http
+    behavior: domain
+    format: text
+    path: ./RuleSet/Apple.txt
+    url: https://cdn.jsdelivr.net/gh/xuhuanxxx/network-rules@release/apple.txt
+    interval: 86400
+
+  GoogleCN:
+    type: http
+    behavior: domain
+    format: text
+    path: ./RuleSet/GoogleCN.txt
+    url: https://cdn.jsdelivr.net/gh/xuhuanxxx/network-rules@release/google@cn.txt
+    interval: 86400
+
+  YouTube:
+    type: http
+    behavior: domain
+    format: text
+    path: ./RuleSet/YouTube.txt
+    url: https://cdn.jsdelivr.net/gh/xuhuanxxx/network-rules@release/youtube.txt
+    interval: 86400
+
+  GoogleFCM:
+    type: http
+    behavior: domain
+    format: text
+    path: ./RuleSet/GoogleFCM.txt
+    url: https://cdn.jsdelivr.net/gh/xuhuanxxx/network-rules@release/googlefcm.txt
+    interval: 86400
+
+  Google:
+    type: http
+    behavior: domain
+    format: text
+    path: ./RuleSet/Google.txt
+    url: https://cdn.jsdelivr.net/gh/xuhuanxxx/network-rules@release/google.txt
+    interval: 86400
+
+  MicrosoftCN:
+    type: http
+    behavior: domain
+    format: text
+    path: ./RuleSet/MicrosoftCN.txt
+    url: https://cdn.jsdelivr.net/gh/xuhuanxxx/network-rules@release/microsoft@cn.txt
+    interval: 86400
+
+  Microsoft:
+    type: http
+    behavior: domain
+    format: text
+    path: ./RuleSet/Microsoft.txt
+    url: https://cdn.jsdelivr.net/gh/xuhuanxxx/network-rules@release/microsoft.txt
+    interval: 86400
+
+  Netflix:
+    type: http
+    behavior: domain
+    format: text
+    path: ./RuleSet/Netflix.txt
+    url: https://cdn.jsdelivr.net/gh/xuhuanxxx/network-rules@release/netflix.txt
+    interval: 86400
+
+  NetflixIP:
+    type: http
+    behavior: ipcidr
+    path: ./RuleSet//NetflixIP.yaml
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Netflix/Netflix_IP.yaml
+    interval: 86400
+
+  SteamCN:
+    type: http
+    behavior: domain
+    format: text
+    path: ./RuleSet/SteamCN.txt
+    url: https://cdn.jsdelivr.net/gh/xuhuanxxx/network-rules@release/steam@cn.txt
+    interval: 86400
+
+  Steam:
+    type: http
+    behavior: domain
+    format: text
+    path: ./RuleSet/Steam.txt
+    url: https://cdn.jsdelivr.net/gh/xuhuanxxx/network-rules@release/steam.txt
+    interval: 86400
+
+  Telegram:
+    type: http
+    behavior: domain
+    format: text
+    path: ./RuleSet/Telegram.txt
+    url: https://cdn.jsdelivr.net/gh/xuhuanxxx/network-rules@release/telegram.txt
+    interval: 86400
+
+  TelegramIP:
+    type: http
+    behavior: ipcidr
+    path: ./RuleSet/TelegramIP.yaml
+    url: https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/telegramcidr.txt
+    interval: 86400
+
+  Github:
+    type: http
+    behavior: domain
+    format: text
+    path: ./RuleSet/Github.txt
+    url: https://cdn.jsdelivr.net/gh/xuhuanxxx/network-rules@release/github.txt
+    interval: 86400
+
+  OpenAI:
+    type: http
+    behavior: domain
+    format: text
+    path: ./RuleSet/OpenAI.txt
+    url: https://cdn.jsdelivr.net/gh/xuhuanxxx/network-rules@release/openai.txt
+    interval: 86400
+
+  Speedtest:
+    type: http
+    behavior: domain
+    format: text
+    path: ./RuleSet/Speedtest.txt
+    url: https://cdn.jsdelivr.net/gh/xuhuanxxx/network-rules@release/speedtest.txt
+    interval: 86400
+
+  Global:
+    type: http
+    behavior: domain
+    format: yaml
+    path: ./RuleSet/Global.yaml
+    url: https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/proxy.txt
+    interval: 86400
+
+  LAN:
+    type: http
+    behavior: ipcidr
+    path: ./RuleSet/LAN.txt
+    url: https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/lancidr.txt
+    interval: 86400
+
+  Private:
+    type: http
+    behavior: domain
+    format: text
+    path: ./RuleSet/Private.txt
+    url: https://cdn.jsdelivr.net/gh/xuhuanxxx/network-rules@release/private.txt
+    interval: 86400
+
+  China:
+    type: http
+    behavior: domain
+    format: text
+    path: ./RuleSet/China.txt
+    url: https://cdn.jsdelivr.net/gh/xuhuanxxx/network-rules@release/cn.txt
+    # url: https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/direct.txt
+    interval: 86400
+
+rules:
+  # - PROCESS-NAME, qbittorrent-nox, DIRECT
+
+  # DIRECT
+  - RULE-SET, Unbreak, 🎯  Direct
+  - RULE-SET, MicrosoftCN, 🎯  Direct
+  - RULE-SET, AppleCN, 🎯  Direct
+  - RULE-SET, GoogleCN, 🎯  Direct
+  - RULE-SET, SteamCN, 🎯  Direct
+
+  # Advertising
+  - RULE-SET, Advertising, 🛡  Guard
+  # - RULE-SET, Privacy, 🛡  Guard
+  # - RULE-SET, Hijacking, 🛡  Guard
+
+  # Media
+  - RULE-SET, YouTube, 📹  Youtube
+  - RULE-SET, Netflix, 🎬  Netflix
+  - RULE-SET, NetflixIP, 🎬  Netflix, no-resolve
+
+  # Apple
+  - RULE-SET, iCloudRelay, 🛰️  iCloudRelay
+  - RULE-SET, iCloud, ☁️  iCloud
+  - RULE-SET, Apple, 🍎  Apple
+
+  # Google
+  - RULE-SET, GoogleFCM, 🪁  Google
+  - RULE-SET, Google, 🪁  Google
+
+  # Microsoft
+  - RULE-SET, Github, 🐙  Github
+  - RULE-SET, Microsoft, 🪟  Microsoft
+
+  # Game
+  - RULE-SET, Steam, 🎮  Steam
+
+  # Telegram
+  - RULE-SET, Telegram, 📲  Telegram
+  - RULE-SET, TelegramIP, 📲  Telegram, no-resolve
+
+  # OpenAI
+  - RULE-SET, OpenAI, 🤖️  OpenAI
+
+  # Speedtest
+  - RULE-SET, Speedtest, 🎲  Speedtest
+
+  # Global Area Network
+  - RULE-SET, Global, 🚀  Proxy
+
+  # China Area Network
+  - RULE-SET, China, 🎯  Direct
+
+  # （可选）使用来自 ipipdotnet 的 ChinaIP 以解决数据不准确的问题，使用 ChinaIP.yaml 时可禁用下列直至（包括）「GEOIP, CN」规则
+  # - RULE-SET, ChinaIP, 🎯  Direct
+
+  # 私有地址
+  - RULE-SET, Private, DIRECT
+
+  # Local Area Network IP
+  - RULE-SET, LAN, DIRECT
+
+  # GeoIP China
+  - GEOIP, CN, 🎯  Direct
+
+  - MATCH, ⌛  Final
