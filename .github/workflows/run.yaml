@@ -1,0 +1,40 @@
+name: Build
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "**/README.md"
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: status
+        run: |
+          main.sh status
+
+      - name: install
+        run: |
+          main.sh install
+
+      - name: status
+        run: |
+          main.sh status
+
+      - name: update
+        run: |
+          main.sh update
+
+      - name: remove
+        run: |
+          main.sh remove
+
+      - name: status
+        run: |
+          main.sh status
