@@ -450,7 +450,6 @@ case "${COMMAND}" in
 esac
 
 IFS=',' read -ra COMPONENTS <<< "$(echo "$worklist" | sed 's/, *\(.*\)/,\1/g' | tr [:upper:] [:lower:])"
-echo "ss: ${COMPONENTS[@]}"
 for component in "${COMPONENTS[@]}"; do
     main "$COMMAND" "$component"
 done
