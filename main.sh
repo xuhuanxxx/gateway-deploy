@@ -7,8 +7,7 @@ DATA_DIR="/srv/$APP_NAME"
 EXT_UI="$DATA_DIR/ui"
 ROUTE_FILE="$DATA_DIR/route.sh"
 UDEV_FILE="/etc/udev/rules.d/99-$APP_NAME.rules"
-CONF_FILE="$DATA_DIR/config.yaml"
-LINK_FILE="/etc/clash.yaml"
+CONF_FILE="/etc/$APP_NAME.yaml"
 EXT_CTL=":9090"
 SECERT="123456"
 DNS_PORT=":1053"
@@ -249,15 +248,6 @@ function create_conf() {
     fi
 }
 
-function create_link() {
-    ln -snf "$DATA_DIR/config.yaml" "/etc/$APP_NAME.yaml"
-    if [ $? -eq 0 ]; then
-        echo "success"
-    else
-        echo "failure"
-    fi
-}
-
 function create() {
     local component="$1"
     case "$component" in
@@ -283,10 +273,6 @@ function create() {
             ;;
         conf)
             res=$(create_conf | tail -n 1)
-            echo "$res"
-            ;;
-        link)
-            res=$(create_link | tail -n 1)
             echo "$res"
             ;;
         *)
@@ -324,10 +310,6 @@ function main() {
             ;;
         conf)
             local path="$CONF_FILE"
-            local type="file"
-            ;;
-        link)
-            local path="$LINK_FILE"
             local type="file"
             ;;
         *)
@@ -386,10 +368,10 @@ function main() {
 # 开始了
 check_arch
 
-allowlist_all="core,daemon,extui,route,udev,conf,link"
-allowlist_status="core,daemon,extui,route,udev,conf,link"
+allowlist_all="core,daemon,extui,route,udev,conf"
+allowlist_status="core,daemon,extui,route,udev,conf"
 allowlist_remove="core,daemon,extui,route,udev"
-allowlist_install="core,daemon,extui,route,udev,conf,link"
+allowlist_install="core,daemon,extui,route,udev,conf"
 allowlist_update="core,extui"
 
 COMMAND="$(echo ${1:-status} | tr [:upper:] [:lower:])"
@@ -401,7 +383,6 @@ profile["extui"]="监控面板"
 profile["route"]="路由规则"
 profile["udev"]="udev规则"
 profile["conf"]="配置文件"
-profile["link"]="配置软链"
 
 case "${COMMAND}" in
     status)
@@ -450,7 +431,6 @@ case "${COMMAND}" in
 esac
 
 IFS=',' read -ra COMPONENTS <<< "$(echo "$worklist" | sed 's/, *\(.*\)/,\1/g' | tr [:upper:] [:lower:])"
-echo "ss: ${COMPONENTS[@]}"
 for component in "${COMPONENTS[@]}"; do
     main "$COMMAND" "$component"
 done
