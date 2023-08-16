@@ -1,0 +1,63 @@
+#!/bin/bash
+
+PATH=$PATH:/usr/sbin
+
+TABLE_ID=100
+NIC_NAME=${NIC_NAME}
+DNS_PORT=${DNS_PORT}
+
+create() {
+    ip route replace default dev utun table $TABLE_ID
+
+    ip rule del from all iif $NIC_NAME lookup $TABLE_ID > /dev/null 2> /dev/null
+    ip rule add from all iif $NIC_NAME lookup $TABLE_ID
+
+	  nft -f - << EOF_NFT
+	  define LOCAL_SUBNET = { 10.0.0.0/8, 100.64.0.0/10, 169.254.0.0/16, 172.16.0.0/12, 192.168.0.0/16, 224.0.0.0/4, 240.0.0.0/4 }
+
+	  table clash
+	  flush table clash
+
+    table clash {
+        chain dns-forward {
+            type nat hook prerouting priority 0; policy accept;
+
+            ip protocol != { tcp, udp } accept
+
+            ip daddr \$LOCAL_SUBNET tcp dport 53 dnat $DNS_PORT
+            ip daddr \$LOCAL_SUBNET udp dport 53 dnat $DNS_PORT
+        }
+    }
+EOF_NFT
+
+	sysctl -w net.ipv4.ip_forward=1
+}
+
+remove() {
+    ip route del default dev utun table $TABLE_ID
+    ip rule del from all iif $NIC_NAME lookup $TABLE_ID
+
+    nft -f - << EOF_NFT
+    flush table clash
+    delete table clash
+EOF_NFT
+}
+
+case "$1" in
+    add)
+        create
+        exit 0
+        ;;
+    remove)
+        remove
+        exit 0
+        ;;
+    "")
+        echo "Action is empty"
+        exit 1
+        ;;
+    *)
+        echo "Invalid action: $1"
+        exit 1
+        ;;
+esac
