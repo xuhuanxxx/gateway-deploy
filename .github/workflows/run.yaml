@@ -20,24 +20,24 @@ jobs:
 
       - name: status
         run: |
-          main.sh status
+          ./main.sh status
 
       - name: install
         run: |
-          main.sh install
+          ./main.sh install
 
       - name: status
         run: |
-          main.sh status
+          ./main.sh status
 
       - name: update
         run: |
-          main.sh update
+          ./main.sh update
 
       - name: remove
         run: |
-          main.sh remove
+          ./main.sh remove
 
       - name: status
         run: |
-          main.sh status
+          ./main.sh status
