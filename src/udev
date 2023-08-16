@@ -1,0 +1,2 @@
+SUBSYSTEM=="net",ENV{INTERFACE}=="utun",ACTION=="add",RUN+="${ROUTE_RULE} $env{ACTION}"
+SUBSYSTEM=="net",ENV{INTERFACE}=="utun",ACTION=="remove",RUN+="${ROUTE_RULE} $env{ACTION}"
