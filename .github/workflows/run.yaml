@@ -15,6 +15,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: chmod
+        run: chmod +x main.sh
+
       - name: status
         run: |
           main.sh status
