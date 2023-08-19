@@ -222,8 +222,8 @@ function create_extui() {
 }
 
 function create_route() {
-    sed -e "s/\${NIC_NAME}/$NIC_NAME/g" \
-        -e "s/\${DNS_PORT}/$DNS_PORT/g" src/route > $ROUTE_FILE
+    sed -e "s#\${NIC_NAME}#$NIC_NAME#g" \
+        -e "s#\${DNS_PORT}#$DNS_PORT#g" src/route > $ROUTE_FILE
 
     chmod +x $ROUTE_FILE
     if [ $? -eq 0 ]; then
@@ -234,7 +234,7 @@ function create_route() {
 }
 
 function create_udev() {
-    sed -e "s/\${$ROUTE_FILE}/$ROUTE_FILE/g" src/udev > $UDEV_FILE
+    sed "s#\${ROUTE_FILE}#$ROUTE_FILE#g" src/udev > $UDEV_FILE
 
     if [ $? -eq 0 ]; then
         echo "success"
@@ -244,10 +244,10 @@ function create_udev() {
 }
 
 function create_conf() {
-    sed -e "s/\${SECRET}/$SECRET/g" \
-        -e "s/\${NIC_NAME}/$NIC_NAME/g" \
-        -e "s/\${DNS_PORT}/$DNS_PORT/g"  \
-        -e "s/\${SUB_URL}/$SUB_URL/g" src/config > $CONF_FILE
+    sed -e "s#\${SECRET}#$SECRET#g" \
+        -e "s#\${NIC_NAME}#$NIC_NAME#g" \
+        -e "s#\${DNS_PORT}#$DNS_PORT#g"  \
+        -e "s#\${SUB_URL}#$SUB_URL#g" src/config > $CONF_FILE
 
     if [ $? -eq 0 ]; then
         echo "success"
