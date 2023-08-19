@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 APP_NAME="clash"
 CORE_FILE="/bin/$APP_NAME"
 DAEMON_FILE="/etc/systemd/system/$APP_NAME.service"
@@ -8,12 +9,12 @@ EXT_UI="$DATA_DIR/ui"
 ROUTE_FILE="$DATA_DIR/route.sh"
 UDEV_FILE="/etc/udev/rules.d/99-$APP_NAME.rules"
 CONF_FILE="/etc/$APP_NAME.yaml"
-EXT_CTL=":9090"
-SECERT="123456"
-DNS_PORT=":1053"
-NIC_NAME="网卡名称"
+EXT_CTL=${EXT_CTL:-":9090"}
+SECERT=${SECERT:-"123456"}
+DNS_PORT=${DNS_PORT:-":1053"}
+NIC_NAME=${NIC_NAME:-"enp46s0"}
 PROXY="https://ghproxy.com/"
-SUB_URL="订阅链接"
+SUB_URL=${SUB_URL:-"订阅链接"}
 
 function check_arch() {
     case "$(uname -m)" in
@@ -25,6 +26,15 @@ function check_arch() {
         "aarch64") arch="arm64";;
         *) echo "Unknown architecture: $(uname -m)" && exit 1 ;;
 esac
+}
+
+function check_env() {
+    echo "EXT_CTL: $EXT_CTL"
+    echo "SECERT: $SECERT"
+    echo "DNS_PORT: $DNS_PORT"
+    echo "NIC_NAME: $NIC_NAME"
+    echo "SUB_URL: $SUB_URL"
+    echo ""
 }
 
 function verify_target() {
@@ -367,6 +377,7 @@ function main() {
 
 # 开始了
 check_arch
+check_env
 
 allowlist_all="core,daemon,extui,route,udev,conf"
 allowlist_status="core,daemon,extui,route,udev,conf"
