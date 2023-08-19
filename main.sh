@@ -247,9 +247,7 @@ function create_conf() {
     sed -e "s/\${SECRET}/$SECRET/g" \
         -e "s/\${NIC_NAME}/$NIC_NAME/g" \
         -e "s/\${DNS_PORT}/$DNS_PORT/g"  \
-        -e "s/\${SUB_URL}/$SUB_URL/g" src/config > $DATA_DIR/config.yaml
-
-    install -m 600 $DATA_DIR/config.yaml
+        -e "s/\${SUB_URL}/$SUB_URL/g" src/config > $CONF_FILE
 
     if [ $? -eq 0 ]; then
         echo "success"
