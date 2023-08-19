@@ -199,6 +199,12 @@ function create_core() {
 }
 
 function create_daemon() {
+    sed -e "s#\${CORE_FILE}#$CORE_FILE#g" \
+        -e "s#\${CONF_FILE}#$CONF_FILE#g" \
+        -e "s#\${DATA_DIR}#$DATA_DIR#g" \
+        -e "s#\${EXT_UI}#$EXT_UI#g"  \
+        -e "s#\${EXT_CTL}#$EXT_CTL#g" src/daemon > $DAEMON_FILE
+
     systemctl daemon-reload
     systemctl enable "$APP_NAME.service"
     if [ $? -eq 0 ]; then
