@@ -33,14 +33,13 @@ log-level: info
 
 ipv6: false
 
-# external-controller: 0.0.0.0:9090
+external-controller: ${EXT_CTL}
 
 # A relative path to the configuration directory or an absolute path to a
 # directory in which you put some static web resource. Clash core will then
 # serve it at `${API}/ui`.
-# external-ui: 'ui'
+external-ui: ${EXT_UI}
 
-# ALWAYS set a secret if RESTful API is listening on 0.0.0.0
 secret: ${SECRET}
 
 # Outbound interface name

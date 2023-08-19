@@ -4,7 +4,7 @@ After=network-online.target route.service
 
 [Service]
 Type=simple
-ExecStart=${CORE_FILE} -f ${CONF_FILE} -d ${DATA_DIR} -ext-ui ${EXT_UI} -ext-ctl ${EXT_CTL}
+ExecStart=${CORE_FILE} -f ${CONF_FILE} -d ${DATA_DIR}
 
 [Install]
 WantedBy=multi-user.target

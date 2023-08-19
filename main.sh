@@ -201,9 +201,7 @@ function create_core() {
 function create_daemon() {
     sed -e "s#\${CORE_FILE}#$CORE_FILE#g" \
         -e "s#\${CONF_FILE}#$CONF_FILE#g" \
-        -e "s#\${DATA_DIR}#$DATA_DIR#g" \
-        -e "s#\${EXT_UI}#$EXT_UI#g"  \
-        -e "s#\${EXT_CTL}#$EXT_CTL#g" src/daemon > $DAEMON_FILE
+        -e "s#\${DATA_DIR}#$DATA_DIR#g" src/daemon > $DAEMON_FILE
 
     systemctl daemon-reload
     systemctl enable "$APP_NAME.service"
@@ -250,7 +248,10 @@ function create_udev() {
 }
 
 function create_conf() {
-    sed -e "s#\${SECRET}#$SECRET#g" \
+    sed -e "s#\${EXT_CTL}#$EXT_CTL#g" \
+        -e "s#\${EXT_UI}#$EXT_UI#g"  \
+        -e "s#\${SECRET}#$SECRET#g" \
+        -e "s#\${EXT_CTL}#$EXT_CTL#g" \
         -e "s#\${NIC_NAME}#$NIC_NAME#g" \
         -e "s#\${DNS_PORT}#$DNS_PORT#g"  \
         -e "s#\${SUB_URL}#$SUB_URL#g" src/config > $CONF_FILE
